@@ -9,13 +9,24 @@ function App() {
     // const { signOut } = useAuthenticator();
     const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
 
+    const [name, setName] = useState<string>("");
+
     const { user, signOut } = useAuthenticator();
 
     useEffect(() => {
         client.models.Todo.observeQuery().subscribe({
             next: (data) => setTodos([...data.items]),
         });
-    }, []);
+
+        const loginID = user?.signInDetails?.loginId;
+        if (loginID) {
+            const index = loginID.indexOf("@");
+            if (index > -1) {
+                const name = loginID.substring(0, index);
+                setName(name);
+            }
+        }
+    }, [user]);
 
     function createTodo() {
         client.models.Todo.create({ content: window.prompt("Todo content") });
@@ -27,7 +38,8 @@ function App() {
 
     return (
         <main>
-            <h1>{user?.signInDetails?.loginId}'s todos</h1>
+            {/* <h1>{user?.signInDetails?.loginId}'s todos</h1> */}
+            <h1>{name}</h1>
             <button onClick={signOut}>Sign out</button>
             <h1>My todos</h1>
             <button onClick={createTodo}>+ new</button>
