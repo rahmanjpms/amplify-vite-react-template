@@ -10,12 +10,7 @@ export const auth = defineAuth({
   },
     
   userAttributes: {
-    // specify a "birthdate" attribute
-    birthdate: {
-      mutable: true,
-      required: false,
-    },
-        
+         
     "custom:display_name": {
       dataType: "String",
       mutable: true,
